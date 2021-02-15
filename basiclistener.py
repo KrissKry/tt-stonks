@@ -12,9 +12,13 @@ class BasicListener(tweepy.StreamListener):
     def on_status(self, status): 
         
         #if contains spam
-        if self.tweethandler.contains_spam(status.text):
-            print('Tweet filtered')
-            return
+        try:      
+            if self.tweethandler.contains_spam(status.extended_tweet["full_text"]):
+                return
+        except AttributeError:
+            if self.tweethandler.contains_spam(status.text):
+                return
+
 
 
         #if meets requirements to print

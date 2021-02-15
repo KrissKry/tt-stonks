@@ -13,26 +13,28 @@ class TweetHandler():
             important_scale += 1
 
 
-
-        split_text = self.text_to_array(tweet.text)
-
         # satisfies important words
         for word in self.important_words:
-            if self.contains_word(word, split_text):   
+            if self.contains_word(word, tweet.text):
                 important_scale += 1
 
 
+        print('Evaluated importance:', important_scale)
+
         # if importance calculated is high enough
         if important_scale >= self.importance_threshold:
-            # print('it is')
             return True
 
-        # print('its not')
         return False
 
 
-    def contains_word(self, word, string):
-        if word in string:
+    def contains_word(self, word, text):
+
+        # for string in string_array:
+        # print ('string check: ', text)
+        text = text.lower()
+
+        if word in text:
             return True
 
         return False
@@ -45,6 +47,7 @@ class TweetHandler():
 
         for phrase in self.discard_phrases:
             if phrase in text:
+                print('Tweet filtered containing "', phrase, '"')
                 return True
 
         return False
@@ -67,6 +70,9 @@ class TweetHandler():
         self.importance_threshold = 3
         self.important_words = ['future', 'speech', 'capitalization', 'potential', 'support','report','fundamentals', 'develops', 
                                 'record','today','elon','musk', 'elonmusk','dip', 'prediction', 'bull', 'bullish', 'adoption','payment', 
-                                'moon', 'buy', 'sell', 'stellar', 'boost', 'ceiling', 'roof']
+                                'moon', 'buy', 'sell', 'network', 'boost', 'ceiling', 'roof', 'analysis', 'pullback', 'xlm', 'banking',
+                                'architecturally', 'architecture', 'alt-coin', 'altcoin', 'alternative', 'prefer', 'bank', 'project']
 
-        self.discard_phrases = ['freedom for', 'giving $40', 'selloff incoming', 'giveaway', 'giving away', 'follow me', 'unconfirmed reports', 'for free']
+        self.discard_phrases = ['freedom for', 'giving $40', 'selloff incoming', 'giveaway', 'giving away', 'follow me', 'unconfirmed reports', 
+                                'uncomfirmed reports', 'for free', 'win', 'price analysis', 'robot', 'how to buy', 'RT', 'retweet', 'they are building', 
+                                'gaming', 'setup']
