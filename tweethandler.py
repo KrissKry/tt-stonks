@@ -69,10 +69,12 @@ class TweetHandler():
         self.followers_threshold = 500
         self.importance_threshold = 3
         self.important_words = ['future', 'speech', 'capitalization', 'potential', 'support','report','fundamentals', 'develops', 
-                                'record','today','elon','musk', 'elonmusk','dip', 'prediction', 'bull', 'bullish', 'adoption','payment', 
-                                'moon', 'buy', 'sell', 'network', 'boost', 'ceiling', 'roof', 'analysis', 'pullback', 'xlm', 'banking',
-                                'architecturally', 'architecture', 'alt-coin', 'altcoin', 'alternative', 'prefer', 'bank', 'project']
+                                'record','today', 'elonmusk','dip', 'prediction', 'bull', 'bullish', 'adoption','payment', 'moon',
+                                'buy', 'sell', 'network', 'boost', 'ceiling', 'roof', 'analysis', 'pullback', 'xlm', 'banking',
+                                'architecturally', 'architecture', 'alt-coin', 'altcoin', 'alternative', 'prefer', 'bank', 'project', 
+                                'manipulate', 'stellar', 'wallet', 'pivot', 'reserves']
 
         self.discard_phrases = ['freedom for', 'giving $40', 'selloff incoming', 'giveaway', 'giving away', 'follow me', 'unconfirmed reports', 
-                                'uncomfirmed reports', 'for free', 'win', 'price analysis', 'robot', 'how to buy', 'RT', 'retweet', 'they are building', 
-                                'gaming', 'setup']
+                                'uncomfirmed reports', 'for free', 'win', 'price analysis', 'robot', 'how to buy', 'retweet', 'since friday',
+                                'gaming', 'setup', 'see your cash', 'are you mining', 'refferal', 'bold prediction', 'lightnet targets moving', 'sign up',
+                                'they are building', '$0XT', 'click the link', 'how to use', 'freecoin', 'freec0in', 'subscribe', 'get free']
