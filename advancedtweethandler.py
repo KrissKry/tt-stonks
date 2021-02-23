@@ -3,9 +3,23 @@
 class AdvancedTweetHandler():
 
 
-    def get_category(self, status, text):
+    def get_category(self, text=None, status=None):
         count = 0
         categories = []
+
+        if status == None and text == None:
+            return 'null'
+
+
+        if status != None:
+            try:        
+                if 'extended_tweet' in status:
+                    text = status.extended_tweet['full_text'].lower()
+                else:
+                    text = status.text.lower()
+            except AttributeError:
+                print('Status is kina weird idk')
+                return
 
 
         for ticker in self.tickers:
@@ -109,8 +123,9 @@ class AdvancedTweetHandler():
 
 
 
-    def set_tickers(self, tickers):
-        self.tickers = tickers
+    # def set_tickers(self, tickers):
+    #     self.tickers = tickers
+
 
     def scan_for_tickers(self, delimiter, filename):
         tickers_count = 0
@@ -120,6 +135,14 @@ class AdvancedTweetHandler():
                 if delimiter in line:
                     tickers_count += 1
         return tickers_count
+
+
+    def should_be_printed(self, status):
+
+        if status.lang == 'en' and status.user.followers_count >= self.followers_threshold:
+            return True
+        
+        return False
 
 
     def load_phrases(self, delimiter, filename, dest_array):
