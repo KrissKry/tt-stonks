@@ -1,11 +1,12 @@
 import tweepy
 
 from basiclistener import BasicListener
+from advancedlistener import AdvancedListener
 import constants
 
 def main():
 
-    tickers = ['XLM'] # $NANO $XRP $ADA $DOT    $DOGE woof 
+    tickers = ['$NANO', '#NANO', '$ADA', 'cardano'] # $NANO $XRP $ADA $DOT    $DOGE woof 
     # musk = '44196397';
     # tweet_count = 10
 
@@ -26,12 +27,12 @@ def main():
     #     print('\n')
 
 
-    basic_listener = BasicListener()
+    # basic_listener = BasicListener()
     # basic_listener.set_follower_threshold(100)
-    basic_listener.setup_shit(100)
+    # basic_listener.setup_shit(100)
+    listener = AdvancedListener()
 
-
-    stream = tweepy.Stream(auth=api.auth, listener=basic_listener)
+    stream = tweepy.Stream(auth=api.auth, listener=listener)
     stream.filter(track=tickers, is_async=True)
 
 

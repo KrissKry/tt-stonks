@@ -13,7 +13,7 @@ class AdvancedTweetHandler():
 
         if status != None:
             try:        
-                if 'extended_tweet' in status:
+                if status.truncated:
                     text = status.extended_tweet['full_text'].lower()
                 else:
                     text = status.text.lower()
@@ -23,17 +23,17 @@ class AdvancedTweetHandler():
 
 
         for ticker in self.tickers:
-            if ticker.lower() in text:
+            if ticker.lower() in text.lower():
                 categories.append(ticker)
                 count += 1
 
 
 
-        if count != 1:
+        if count > 1:
             # print('Multiple potential categories detected')
-            # return ''
-        # elif count <= 0:
-            print('Detected multiple or no categories')
+            return 'GENERAL'
+        elif count <= 0:
+            # print('Detected multiple or no categories')
             return 'null'
         else:
             return categories[0]
@@ -43,8 +43,8 @@ class AdvancedTweetHandler():
 
     def is_spam(self, status):
 
-        #extract text from tweet
-        if 'extended_tweet' in status:
+        # extract text from tweet
+        if status.truncated:
             text = status.extended_tweet['full_text'].lower()
         else:
             text = status.text.lower()
@@ -52,29 +52,29 @@ class AdvancedTweetHandler():
         #get main ticker
         ticker = self.get_category(text=text)
 
-        #get general and ticker index
-        general_index = self.tickers.index('GENERAL')
+        if self.scan_for_spam(ticker, text):
+            return True
 
-        #check for all phrases in general rules
-        for phrase in self.discard_phrases[general_index]:
-            if phrase in text:
-                return True
-
-
-        #get index of the ticker found
-        if ticker != 'null':
-
-            ticker_index = self.tickers.index(ticker)
-
-            #check for all phrases in particular ticker's rules
-            for phrase in self.discard_phrases[ticker_index]:
-                if phrase in text:
-                    return True
-
+        if self.scan_for_spam('GENERAL', text):
+            return True
 
         #text passed spam check
         return False
 
+
+    def scan_for_spam(self, ticker, text):
+
+        try:
+            ticker_index = self.tickers.index(ticker)
+        except ValueError:
+            return False
+
+        for phrase in self.discard_phrases[ticker_index]:
+            if phrase.lower() in text.lower():
+                print('Spam filtered with', phrase)
+                return True
+
+        return False
 
 
     def is_important(self, status):
@@ -82,7 +82,7 @@ class AdvancedTweetHandler():
         importance_value = 0
         
         #extract text from tweet
-        if 'extended_tweet' in status:
+        if status.truncated:
             text = status.extended_tweet['full_text'].lower()
         else:
             text = status.text.lower()
@@ -123,9 +123,6 @@ class AdvancedTweetHandler():
 
 
 
-    # def set_tickers(self, tickers):
-    #     self.tickers = tickers
-
 
     def scan_for_tickers(self, delimiter, filename):
         tickers_count = 0
@@ -137,9 +134,10 @@ class AdvancedTweetHandler():
         return tickers_count
 
 
-    def should_be_printed(self, status):
+    def should_be_analyzed(self, status):
 
-        if status.lang == 'en' and status.user.followers_count >= self.followers_threshold:
+        # print('Should be printed?')
+        if status.lang == 'en':# and status.user.followers_count >= self.followers_threshold:
             return True
         
         return False
@@ -188,8 +186,8 @@ class AdvancedTweetHandler():
         keyword_filename = 'tweet_keywords.txt'
         delimiter = '___'   
 
-        self.followers_threshold = 500
-        self.importance_threshold = 4
+        self.followers_threshold = 100
+        self.importance_threshold = 3
         self.discard_phrases = []
         self.keyphrases = []
         self.tickers = []
@@ -204,4 +202,5 @@ class AdvancedTweetHandler():
 
 
 
-t = AdvancedTweetHandler()
+# t = AdvancedTweetHandler()
+# t.is_spam()
