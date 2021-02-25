@@ -108,7 +108,7 @@ class AdvancedTweetHandler():
 
         for phrase in self.keyphrases[general_index]:
             if phrase in text:
-                print('found phrase', phrase)
+                # print('found phrase', phrase)
                 importance_value += 1
 
         #check ticker's keyphrases if not null
@@ -137,7 +137,7 @@ class AdvancedTweetHandler():
 
     def should_be_analyzed(self, status):
 
-        return status.lang == 'en'
+        return status.lang == 'en' and status.user.followers_count >= 0.5 * self.followers_threshold
         # if status.lang == 'en':# and status.user.followers_count >= self.followers_threshold:
             # return True
         # return False
@@ -184,11 +184,11 @@ class AdvancedTweetHandler():
 
     def __init__(self):
 
-        discard_filename = 'tweet_discard_phrases.txt'
-        keyword_filename = 'tweet_keywords.txt'
+        discard_filename = 'config/tweet_discard_phrases.txt'
+        keyword_filename = 'config/tweet_keywords.txt'
         delimiter = '___'   
 
-        self.followers_threshold = 250
+        self.followers_threshold = 500
         self.importance_threshold = 3
         self.discard_phrases = []
         self.keyphrases = []
