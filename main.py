@@ -3,12 +3,12 @@ import tweepy
 from basiclistener import BasicListener
 from advancedlistener import AdvancedListener
 import constants
+from util import load_tickers
 
 def main():
 
-    tickers = ['$NANO', '#NANO', '$ADA', 'cardano'] # $NANO $XRP $ADA $DOT    $DOGE woof 
+    tickers = load_tickers()
     # musk = '44196397';
-    # tweet_count = 10
 
 
     auth = tweepy.OAuthHandler(constants.API_KEY, constants.API_KEY_SECRET)
@@ -17,18 +17,8 @@ def main():
     api = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
 
 
-    
-    # status = api.user_timeline(user_id=musk, count=tweet_count)
-    # for i in range(tweet_count):
-    #     tweet = status[i]
-    #     print( tweet['created_at'])
-    #     print( tweet['id'])
-    #     print( tweet['text'])
-    #     print('\n')
-
 
     # basic_listener = BasicListener()
-    # basic_listener.set_follower_threshold(100)
     # basic_listener.setup_shit(100)
     listener = AdvancedListener()
 
@@ -36,7 +26,4 @@ def main():
     stream.filter(track=tickers, is_async=True)
 
 
-
-
-main()
-    
+main()    
