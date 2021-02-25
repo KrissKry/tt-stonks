@@ -14,11 +14,11 @@ class AdvancedTweetHandler():
         if status != None:
             try:        
                 if status.truncated:
-                    text = status.extended_tweet['full_text'].lower()
+                    text = status.extended_tweet['full_text']
                 else:
-                    text = status.text.lower()
+                    text = status.text
             except AttributeError:
-                print('Status is kina weird idk')
+                print('Status is kinda weird idk')
                 return
 
 
@@ -77,7 +77,7 @@ class AdvancedTweetHandler():
         return False
 
 
-    def is_important(self, status):
+    def evaluate_importance(self, status):
         
         importance_value = 0
         
@@ -108,6 +108,7 @@ class AdvancedTweetHandler():
 
         for phrase in self.keyphrases[general_index]:
             if phrase in text:
+                print('found phrase', phrase)
                 importance_value += 1
 
         #check ticker's keyphrases if not null
@@ -119,7 +120,7 @@ class AdvancedTweetHandler():
                     importance_value += 1
 
 
-        return importance_value >= self.importance_threshold
+        return importance_value
 
 
 
@@ -136,11 +137,10 @@ class AdvancedTweetHandler():
 
     def should_be_analyzed(self, status):
 
-        # print('Should be printed?')
-        if status.lang == 'en':# and status.user.followers_count >= self.followers_threshold:
-            return True
-        
-        return False
+        return status.lang == 'en'
+        # if status.lang == 'en':# and status.user.followers_count >= self.followers_threshold:
+            # return True
+        # return False
 
 
     def load_phrases(self, delimiter, filename, dest_array):
@@ -178,6 +178,8 @@ class AdvancedTweetHandler():
         dest_array.append(list(read_phrases))
 
 
+    def get_importance_threshold(self):
+        return self.importance_threshold
 
 
     def __init__(self):
@@ -186,7 +188,7 @@ class AdvancedTweetHandler():
         keyword_filename = 'tweet_keywords.txt'
         delimiter = '___'   
 
-        self.followers_threshold = 100
+        self.followers_threshold = 250
         self.importance_threshold = 3
         self.discard_phrases = []
         self.keyphrases = []

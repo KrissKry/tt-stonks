@@ -17,16 +17,27 @@ class AdvancedListener(tweepy.StreamListener):
                 # print('Spam filtered')
                 return
 
+
             #checks for keywords and followers count
-            if self.tweethandler.is_important(status):
-                
-                #save to file
+            evaluation = self.tweethandler.evaluate_importance(status)
+
+
+            #if eligible for printing
+            if evaluation + 1 >= self.tweethandler.get_importance_threshold():
+                playsound('pop.mp3')
+                self.print_tweet(status)
+
+            else:
+                print('Tweet ommited')
+                return
+
+
+            # if eligible for saving
+            if evaluation >= self.tweethandler.get_importance_threshold():
+                # print('saving...')
                 ticker = self.tweethandler.get_category(status=status)
                 self.filesaver.save_important_tweet(ticker, status)
-
-            # if self.tweethandler.should_be_printed
-            playsound('pop.mp3')
-            self.print_tweet(status)
+            
 
 
 
@@ -53,7 +64,7 @@ class AdvancedListener(tweepy.StreamListener):
             print('Too many API calls ;-;')
             return False
         elif error_code == 420:
-            print('AUTH Failed. Blaze it.')
+            print('Auth Failed. Blaze it.')
             return False
 
             #sprawdzic z ktorych bledow mozna sie podniesc
@@ -66,6 +77,7 @@ class AdvancedListener(tweepy.StreamListener):
         while True:
             # do shit
             time.sleep(self.save_loop_time)
+            print('to-do save ticker mentions every 30minutes: sleep_and_save() @line 72')
             #self.filesaver.save_stuff()
             #to-do
 

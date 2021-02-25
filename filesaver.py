@@ -47,11 +47,12 @@ class FileSaver():
 
     def save_important_tweet(self, ticker, status): #status == tweeter object
 
+        #interesting tweet possibly with other keywords, not main tickers
         if ticker == 'null':
-            # print('Null ticker given')
-            return
+            ticker = 'GENERAL'
+            # return
 
-        filename = 'important_' + ticker + '.txt'
+        filename = 'output/important_' + ticker + '.txt'
 
 
         first_line = "\n\n\n" + status.created_at.strftime("%Y/%m/%d, %H:%M:%S") + "\n"
